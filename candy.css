@@ -837,3 +837,667 @@ h1 span {
     transition-duration: .01ms !important
   }
 }
+
+/* ==========================================================
+   CANDY ARCADE REMIX — playful, punchy, AWS-society edition
+   Visual-only overrides: existing game logic and selectors stay.
+   ========================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+  color-scheme: light;
+  --ink: #20143b;
+  --muted: #76658d;
+  --purple: #7047ff;
+  --orange: #ff7438;
+  --blue: #36bdf8;
+  --pink: #ff4fa3;
+  --green: #19c98b;
+  --yellow: #ffe34f;
+  --board-size: min(76vh, min(70vw, 760px));
+}
+
+body.game-page {
+  position: relative;
+  isolation: isolate;
+  overflow-x: hidden;
+  padding: clamp(14px, 2.5vw, 34px);
+  color: var(--ink);
+  font-family: 'Baloo 2', system-ui, sans-serif;
+  background:
+    radial-gradient(circle at 7% 16%, #ff4fa326 0 2px, transparent 3px),
+    radial-gradient(circle at 92% 23%, #7047ff24 0 3px, transparent 4px),
+    radial-gradient(circle at 18% 83%, #ffb52f35 0 3px, transparent 4px),
+    radial-gradient(circle at 83% 78%, #19c98b2b 0 2px, transparent 3px),
+    #fff6e8;
+  background-size: 38px 38px, 54px 54px, 47px 47px, 42px 42px, auto;
+}
+
+body.game-page::before,
+body.game-page::after {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  pointer-events: none;
+  border: 2px solid #20143b;
+  border-radius: 50%;
+  opacity: .08;
+}
+
+body.game-page::before {
+  width: 360px;
+  height: 360px;
+  top: -210px;
+  right: 12%;
+  box-shadow: 0 0 0 22px #ff4fa3, 0 0 0 44px #ffe34f;
+}
+
+body.game-page::after {
+  width: 260px;
+  height: 260px;
+  bottom: -160px;
+  left: 8%;
+  box-shadow: 0 0 0 20px #36bdf8, 0 0 0 40px #19c98b;
+}
+
+.game-layout {
+  width: min(1500px, 100%);
+  gap: clamp(20px, 3vw, 48px);
+}
+
+.play-area {
+  gap: 14px;
+}
+
+.board-heading {
+  padding: 0 2px;
+}
+
+.live-pill {
+  gap: 9px;
+  padding: 8px 14px;
+  border: 2px solid var(--ink);
+  border-radius: 8px 15px 8px 15px;
+  color: var(--ink);
+  background: var(--yellow);
+  box-shadow: 3px 4px 0 var(--ink);
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: .06em;
+  transform: rotate(-1deg);
+}
+
+.live-pill>span {
+  background: #19c98b;
+  box-shadow: 0 0 0 3px #20143b20;
+  animation: arcade-blink 1.2s steps(2, start) infinite;
+}
+
+.board-caption {
+  color: #7d668c;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+
+.board-frame {
+  padding: clamp(9px, 1.2vw, 14px);
+  border: 3px solid var(--ink);
+  border-radius: 18px;
+  background: #fffbf3;
+  box-shadow: 8px 9px 0 var(--ink), 13px 14px 0 #ff4fa329;
+}
+
+.board-frame::before {
+  content: "✦ SWEET MODE: ON ✦";
+  position: absolute;
+  z-index: 6;
+  top: -13px;
+  left: 22px;
+  padding: 3px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 5px;
+  color: var(--ink);
+  background: var(--yellow);
+  font: 700 9px 'Space Mono', monospace;
+  letter-spacing: .04em;
+  transform: rotate(-2deg);
+}
+
+
+#board {
+  gap: clamp(4px, .55vw, 7px);
+  padding: clamp(5px, .65vw, 8px);
+  border: 2px solid var(--ink);
+  border-radius: 11px;
+
+  /* Bubblegum pink arcade grid */
+  background-color: #ffb6d9;
+  background-image:
+    linear-gradient(#ffffff45 1px, transparent 1px),
+    linear-gradient(90deg, #ffffff45 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+#board img {
+  padding: clamp(2px, .3vw, 4px);
+  border: 2px solid #fff;
+  border-radius: 9px 12px 8px 12px;
+  background: linear-gradient(145deg, #fffdf8, #ffe9f3);
+  box-shadow: 0 3px 0 #F48FB1, 0 5px 7px #F48FB1;
+  transition: transform .13s cubic-bezier(.2, 1.4, .4, 1), background .13s,
+    box-shadow .13s, filter .13s, opacity .13s;
+}
+
+#board img:nth-child(3n) {
+  border-radius: 12px 8px 12px 8px;
+}
+
+#board img:hover {
+  transform: translateY(-2px) rotate(-2deg) scale(1.035);
+  filter: saturate(1.12);
+  box-shadow: 0 5px 0 #17102c, 0 8px 10px #09051438;
+}
+
+#board img.selected {
+  z-index: 3;
+  transform: scale(1.1) rotate(4deg);
+  background: var(--yellow);
+  outline: 3px solid #fff;
+  outline-offset: 1px;
+  box-shadow: 0 0 0 4px var(--pink), 0 5px 0 var(--ink);
+}
+
+#board img.matching {
+  z-index: 4;
+  animation: candy-burst .38s cubic-bezier(.2, 1.5, .4, 1) forwards;
+  filter: drop-shadow(0 0 5px #ffe34f) saturate(1.4);
+}
+
+#board img.invalid-swap {
+  animation: arcade-shake .25s ease-in-out;
+}
+
+.match-line {
+  stroke: var(--yellow);
+  stroke-width: 10;
+  filter: drop-shadow(0 0 2px #ff4fa3) drop-shadow(0 0 7px #ff7438);
+}
+
+.match-spark {
+  fill: var(--yellow);
+  stroke: var(--pink);
+  stroke-width: 2.5;
+}
+
+.game-sidebar {
+  position: relative;
+  align-self: center;
+  padding: clamp(22px, 2.7vw, 34px);
+  border: 3px solid var(--ink);
+  border-radius: 18px 18px 34px 18px;
+  background: #fffdf8;
+  box-shadow: 7px 8px 0 var(--ink), 12px 13px 0 #7047ff20;
+  backdrop-filter: none;
+}
+
+.game-sidebar::before {
+  content: "PLAYER 01  •  ARCADE CLUB";
+  display: block;
+  margin: -7px 0 18px;
+  padding-bottom: 11px;
+  border-bottom: 2px dashed #dfd3e8;
+  color: #8c759e;
+  font: 700 9px 'Space Mono', monospace;
+  letter-spacing: .08em;
+}
+
+.back-link,
+.home-link {
+  color: #7d668c;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+}
+
+.back-link {
+  padding: 7px 10px;
+  border: 1.5px solid #d8c8e7;
+  border-radius: 7px;
+  margin-bottom: 22px;
+}
+
+.back-link:hover,
+.home-link:hover {
+  color: var(--pink);
+}
+
+.brand-mark {
+  width: 54px;
+  height: 54px;
+  border: 2px solid var(--ink);
+  border-radius: 15px 15px 15px 5px;
+  color: var(--ink);
+  background: var(--yellow);
+  font-size: 29px;
+  box-shadow: 4px 4px 0 var(--ink);
+  transform: rotate(-5deg);
+}
+
+.eyebrow {
+  color: #e34c92;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: .14em;
+}
+
+h1 {
+  font: 800 clamp(38px, 4.1vw, 54px)/.92 'Baloo 2', sans-serif;
+  letter-spacing: -.055em;
+  text-transform: uppercase;
+  text-shadow: 2px 3px 0 #ffe34f;
+}
+
+h1 span {
+  display: inline-block;
+  color: var(--purple);
+  text-shadow: 2px 3px 0 #ffb3d7;
+  transform: rotate(-2deg);
+}
+
+.subtitle {
+  color: #786789;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.stats {
+  gap: 10px;
+}
+
+.stat-card {
+  min-height: 100px;
+  padding: 13px 13px 12px;
+  border: 2px solid var(--ink);
+  border-radius: 12px 12px 12px 4px;
+  background: #fff;
+  box-shadow: 3px 4px 0 var(--ink);
+  overflow: hidden;
+  transition: transform .16s ease, box-shadow .16s ease;
+}
+
+.stat-card:hover {
+  transform: translate(-1px, -2px) rotate(-1deg);
+  box-shadow: 5px 6px 0 var(--ink);
+}
+
+.stat-card::after {
+  width: 55px;
+  height: 55px;
+  right: -17px;
+  top: -17px;
+  opacity: .9;
+}
+
+.score-card {
+  --wash: #e8ddff;
+  --accent: #7047ff;
+}
+
+.time-card {
+  --wash: #ffe0c9;
+  --accent: #e65b28;
+}
+
+.moves-card {
+  --wash: #d8f4ff;
+  --accent: #138fc7;
+}
+
+.best-card {
+  --wash: #ffd8e9;
+  --accent: #e34c92;
+}
+
+.stat-icon {
+  top: 10px;
+  right: 11px;
+  font-size: 18px;
+}
+
+.stat-label {
+  color: #8c759e;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: .05em;
+}
+
+.stat-card strong {
+  font: 800 clamp(25px, 2.6vw, 32px)/1 'Baloo 2', sans-serif;
+}
+
+.score-card strong {
+  color: #7047ff;
+}
+
+.time-card strong {
+  color: #e65b28;
+}
+
+.moves-card strong {
+  color: #138fc7;
+}
+
+.best-card strong {
+  color: #e34c92;
+}
+
+.status-panel {
+  gap: 12px;
+  border: 2px solid #20143b;
+  border-radius: 12px 12px 12px 4px;
+  background: #dffbea;
+  box-shadow: 3px 4px 0 var(--ink);
+}
+
+.status-orb {
+  border: 2px solid var(--ink);
+  border-radius: 10px 10px 10px 4px;
+  background: var(--green);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.status-label {
+  color: #287d5e;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+}
+
+.status-panel #comments {
+  color: #254b3d;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.status-panel #comments.show {
+  color: #7047ff;
+}
+
+.sidebar-tip {
+  border: 2px dashed #e6a62d;
+  border-radius: 12px 12px 12px 4px;
+  background: #fff1b6;
+  color: #9a5a15;
+}
+
+.sidebar-tip>span {
+  font-size: 25px;
+}
+
+.sidebar-tip strong {
+  color: #79410d;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+}
+
+.sidebar-tip p {
+  color: #906a39;
+  font-size: 12px;
+}
+
+.service-legend {
+  color: #8c759e;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: -.02em;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--ink);
+  border-radius: 3px;
+  box-shadow: 1px 1px 0 var(--ink);
+}
+
+.legend-dot.purple {
+  background: #9773f5;
+}
+
+.legend-dot.orange {
+  background: #ffad51;
+}
+
+.legend-dot.blue {
+  background: #55b8ff;
+}
+
+.legend-dot.pink {
+  background: #ff7ab3;
+}
+
+.legend-dot.green {
+  background: #56cfa5;
+}
+
+.legend-dot.yellow {
+  background: #f3d04e;
+}
+
+#gameOver {
+  background: #20143bd9;
+  backdrop-filter: blur(5px);
+}
+
+#gameOver .card {
+  position: relative;
+  border: 3px solid var(--ink);
+  border-radius: 20px 20px 30px 20px;
+  background: #fff8e9;
+  box-shadow: 8px 8px 0 var(--yellow), 12px 12px 0 var(--ink);
+  animation: arcade-card-in .3s cubic-bezier(.2, 1.4, .4, 1);
+}
+
+#gameOver .card::before {
+  content: "ROUND COMPLETE!";
+  display: inline-block;
+  margin-bottom: 17px;
+  padding: 5px 10px;
+  border: 2px solid var(--ink);
+  border-radius: 5px;
+  background: var(--pink);
+  color: #20143b;
+  font: 700 9px 'Space Mono', monospace;
+  letter-spacing: .06em;
+  transform: rotate(-3deg);
+}
+
+.game-over-icon {
+  border: 2px solid var(--ink);
+  border-radius: 15px 15px 15px 5px;
+  background: var(--yellow);
+  color: var(--ink);
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+#gameOver h2 {
+  font: 800 31px 'Baloo 2', sans-serif;
+  text-transform: uppercase;
+}
+
+.final-label,
+.best-result {
+  color: #786789;
+}
+
+.final-score {
+  color: var(--purple);
+  font: 800 48px 'Baloo 2', sans-serif;
+  text-shadow: 2px 3px 0 #ffb3d7;
+}
+
+#gameOver button {
+  border: 2px solid var(--ink);
+  border-radius: 9px 9px 9px 3px;
+  color: var(--ink);
+  background: var(--yellow);
+  box-shadow: 4px 4px 0 var(--ink);
+  font: 800 15px 'Baloo 2', sans-serif;
+  text-transform: uppercase;
+  transition: transform .13s ease, box-shadow .13s ease;
+}
+
+#gameOver button:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+.play-hint {
+  border: 2px dashed #d7c5e8;
+  border-radius: 10px 10px 10px 4px;
+  background: #fffdf8;
+  color: #786789;
+  font-family: 'Space Mono', monospace;
+  box-shadow: 3px 3px 0 #20143b16;
+}
+
+.play-hint strong {
+  color: #352052;
+}
+
+.hint-icon {
+  border: 1.5px solid var(--ink);
+  border-radius: 9px 9px 9px 3px;
+  background: var(--yellow);
+  color: var(--ink);
+  box-shadow: 2px 2px 0 var(--ink);
+}
+
+@keyframes arcade-blink {
+  50% {
+    opacity: .35;
+  }
+}
+
+@keyframes candy-burst {
+  0% {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+
+  38% {
+    transform: scale(1.28) rotate(-9deg);
+    opacity: 1;
+  }
+
+  70% {
+    transform: scale(.82) rotate(8deg);
+    opacity: .9;
+  }
+
+  100% {
+    transform: scale(.2) rotate(18deg);
+    opacity: 0;
+  }
+}
+
+@keyframes arcade-shake {
+
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  25% {
+    translate: -4px 1px;
+  }
+
+  50% {
+    translate: 4px -1px;
+  }
+
+  75% {
+    translate: -3px 0;
+  }
+}
+
+@keyframes arcade-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(.92) rotate(2deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0);
+  }
+}
+
+@media (max-width: 900px) {
+  .board-frame {
+    box-shadow: 6px 7px 0 var(--ink), 10px 11px 0 #ff4fa329;
+  }
+
+  .game-sidebar {
+    box-shadow: 5px 6px 0 var(--ink), 9px 10px 0 #7047ff20;
+  }
+}
+
+@media (max-width: 680px) {
+  body.game-page {
+    padding: 13px;
+  }
+
+  .game-sidebar {
+    border-radius: 15px 15px 25px 15px;
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+
+  .game-sidebar::before {
+    margin-bottom: 12px;
+  }
+
+  .board-frame {
+    border-radius: 14px;
+    box-shadow: 5px 6px 0 var(--ink);
+  }
+
+  .board-frame::before {
+    top: -10px;
+    left: 15px;
+    font-size: 7px;
+  }
+
+  #board {
+    gap: clamp(3px, .65vw, 5px);
+    padding: 4px;
+  }
+
+  #board img {
+    border-radius: 6px 8px 6px 8px;
+    box-shadow: 0 2px 0 #17102c;
+  }
+
+  .stat-card {
+    border-radius: 9px 9px 9px 3px;
+    box-shadow: 2px 3px 0 var(--ink);
+  }
+
+  .status-panel {
+    box-shadow: 2px 3px 0 var(--ink);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-pill>span {
+    animation: none;
+  }
+
+  #board img:hover,
+  .stat-card:hover,
+  #gameOver button:hover {
+    transform: none;
+  }
+}

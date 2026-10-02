@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700;800;900&family=Space+Grotesk:wght@600;700&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@600;700&display=swap');
 :root {
     --ink: #30254d;
     --purple: #7955e9;
@@ -495,5 +496,295 @@ h1 span {
     *::after {
         animation-duration: .01ms !important;
         transition-duration: .01ms !important;
+    }
+}
+
+
+
+/* ==========================================
+   CANDY ARCADE — LANDING PAGE THEME
+   Bubblegum pink + retro arcade personality
+   ========================================== */
+
+:root {
+    --ink: #302044;
+    --purple: #7955e9;
+    --pink: #ff4fa3;
+    --orange: #ffad55;
+    --blue: #58b8f5;
+    --green: #56cda9;
+    --yellow: #ffe34f;
+}
+
+/* Warm, candy-speckled background */
+body.landing-page {
+    position: relative;
+    isolation: isolate;
+    background-color: #fff5e9;
+    background-image:
+        radial-gradient(circle, #ff4fa32b 2px, transparent 2.5px),
+        radial-gradient(circle, #7955e926 2px, transparent 2.5px),
+        radial-gradient(ellipse at 12% 12%, #ffc5df 0, transparent 30%),
+        radial-gradient(ellipse at 90% 85%, #ffe2a7 0, transparent 32%),
+        #fff5e9;
+    background-size: 35px 35px, 49px 49px, auto, auto, auto;
+    color: var(--ink);
+    font-family: 'Baloo 2', sans-serif;
+}
+
+/* The arcade machine */
+.arcade {
+    border: 3px solid var(--ink);
+    border-radius: 24px 24px 38px 24px;
+    background: #fffaf1;
+    box-shadow:
+        8px 9px 0 var(--ink),
+        14px 15px 0 #ff4fa329;
+}
+
+/* Small arcade label */
+.mini-kicker {
+    color: #9b4c86;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: .14em;
+}
+
+/* Big playful title */
+h1 {
+    font-family: 'Baloo 2', sans-serif;
+    font-weight: 800;
+    letter-spacing: -.065em;
+    text-transform: uppercase;
+    text-shadow: 3px 4px 0 #ffe34f;
+}
+
+h1 span {
+    background: linear-gradient(
+        110deg,
+        #7955e9 0%,
+        #ff4fa3 48%,
+        #ff8a43 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(2px 3px 0 #ffd0e5);
+}
+
+/* Intro text */
+.tagline {
+    color: #786789;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+/* Top sticker becomes a comic-style arcade badge */
+.game-sticker {
+    border: 2px solid var(--ink);
+    border-radius: 7px 12px 7px 12px;
+    color: var(--ink);
+    background: var(--yellow);
+    box-shadow: 3px 4px 0 var(--ink);
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    transform: rotate(-7deg);
+    transition: transform .2s ease;
+}
+
+.game-sticker:hover {
+    transform: rotate(-2deg) scale(1.05);
+}
+
+/* Candy tiles: bold outlines and playful colours */
+.play-tile {
+    border: 3px solid var(--ink);
+    border-radius: 20px 20px 20px 7px;
+    box-shadow:
+        4px 5px 0 var(--ink),
+        0 10px 22px #30204415,
+        inset 0 2px 0 #ffffff;
+    cursor: default;
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        filter .2s ease;
+}
+
+.play-tile:hover {
+    transform: translateY(-5px) rotate(0deg) scale(1.06);
+    box-shadow:
+        5px 7px 0 var(--ink),
+        0 14px 24px #30204420;
+    filter: saturate(1.12);
+}
+
+.play-tile span {
+    font-size: 46px;
+    filter: drop-shadow(1px 2px 0 #30204413);
+}
+
+.play-tile small {
+    color: var(--ink);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: -.04em;
+}
+
+/* Give each AWS tile its own candy identity */
+.tile-ec2 {
+    border-radius: 19px 19px 19px 6px;
+    background: linear-gradient(145deg, #f5edff, #d9c8ff);
+    box-shadow: 4px 5px 0 #302044;
+}
+
+.tile-s3 {
+    border-radius: 19px 6px 19px 19px;
+    background: linear-gradient(145deg, #fff5ce, #ffd36c);
+    box-shadow: 4px 5px 0 #302044;
+}
+
+.tile-lambda {
+    border-radius: 6px 19px 19px 19px;
+    background: linear-gradient(145deg, #e6f7ff, #a7e2ff);
+    box-shadow: 4px 5px 0 #302044;
+}
+
+.tile-rds {
+    border-radius: 19px 19px 6px 19px;
+    background: linear-gradient(145deg, #ffe9f3, #ffb6d9);
+    box-shadow: 4px 5px 0 #302044;
+}
+
+.tile-cloud9 {
+    border-radius: 19px 6px 19px 19px;
+    background: linear-gradient(145deg, #e4fff2, #a9efd2);
+    box-shadow: 4px 5px 0 #302044;
+}
+
+/* Combo sticker */
+.combo-sticker {
+    border: 2px solid var(--ink);
+    border-radius: 12px 12px 12px 4px;
+    color: #5e3a13;
+    background: var(--yellow);
+    box-shadow: 3px 4px 0 var(--ink);
+    font-family: 'Space Mono', monospace;
+}
+
+/* Main Play button */
+.play-button {
+    position: relative;
+    border: 3px solid var(--ink);
+    border-radius: 12px 12px 12px 4px;
+    color: #fff;
+    background: linear-gradient(105deg, #7955e9, #a35ce5 52%, #ff4fa3);
+    box-shadow:
+        0 6px 0 var(--ink),
+        0 10px 22px #7955e936;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    letter-spacing: .04em;
+}
+
+.play-button:hover {
+    transform: translateY(-4px) rotate(-1deg);
+    box-shadow:
+        0 10px 0 var(--ink),
+        0 16px 26px #7955e940;
+    filter: saturate(1.2);
+}
+
+.play-button:active {
+    transform: translateY(3px);
+    box-shadow: 0 2px 0 var(--ink);
+}
+
+/* Supporting link */
+.learn-link {
+    color: #8b789b;
+}
+
+.learn-link span {
+    color: #e04491;
+}
+
+/* Footer becomes a tiny arcade-machine label */
+.bottom-doodle {
+    color: #8e789f;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+}
+
+.doodle-cloud {
+    color: #7955e9;
+}
+
+.doodle-star {
+    color: #ff9f2f;
+}
+
+/* Clouds and sparkles */
+.cloud {
+    color: #ffb6d9;
+    opacity: .34;
+}
+
+.cloud-two {
+    color: #c9b8ff;
+    opacity: .38;
+}
+
+.sparkle {
+    color: #ff9f2f;
+}
+
+.sparkle-two {
+    color: #7955e9;
+}
+
+.sparkle-three {
+    color: #ff4fa3;
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .play-tile,
+    .sparkle,
+    .game-sticker {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    .arcade {
+        border-radius: 19px 19px 28px 19px;
+        box-shadow: 5px 6px 0 var(--ink);
+    }
+
+    .play-button {
+        min-width: 220px;
+        padding: 15px 18px;
+    }
+
+    .play-tile {
+        border-width: 2px;
+        box-shadow: 3px 4px 0 var(--ink);
+    }
+
+    .play-tile:hover {
+        box-shadow: 3px 4px 0 var(--ink);
+    }
+}
+
+@media (max-width: 380px) {
+    .arcade {
+        box-shadow: 4px 5px 0 var(--ink);
+    }
+
+    .mini-kicker {
+        letter-spacing: .08em;
     }
 }
