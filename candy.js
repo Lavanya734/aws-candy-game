@@ -22,11 +22,16 @@
     const crushSound = document.getElementById("crushSound");
     const gameOverEl = document.getElementById("gameOver");
     const finalScoreEl = document.getElementById("finalScore");
+    const movesEl = document.getElementById("moves");
+    const bestScoreEl = document.getElementById("bestScore");
+    const finalBestScoreEl = document.getElementById("finalBestScore");
     const playAgainBtn = document.getElementById("playAgain");
 
     let grid = [];   // grid[r][c] = candy name, or null while empty
     let tiles = [];  // tiles[r][c] = <img> element
     let score = 0;
+    let moves = 0;
+    let bestScore = readBestScore();
     let timeLeft = GAME_SECONDS;
     let running = false;
     let settled = true;  // true when nothing is falling or waiting to be crushed
@@ -38,6 +43,19 @@
     let commentTimeout = null;
 
     const randomCandy = () => CANDIES[Math.floor(Math.random() * CANDIES.length)];
+
+    function readBestScore() {
+        try { return Number(localStorage.getItem("awsCandyCrushBest") || 0); }
+        catch (error) { return 0; }
+    }
+
+    function saveBestScore() {
+        if (score > bestScore) {
+            bestScore = score;
+            try { localStorage.setItem("awsCandyCrushBest", String(bestScore)); }
+            catch (error) { /* storage can be unavailable in private browsing */ }
+        }
+    }
 
     /* ---------- setup ---------- */
 
@@ -78,6 +96,7 @@
         clearInterval(clockId);
         fillBoardWithoutMatches();
         score = 0;
+        moves = 0;
         timeLeft = GAME_SECONDS;
         running = true;
         settled = true;
@@ -85,7 +104,7 @@
         selected = null;
         drag = null;
         gameOverEl.hidden = true;
-        showComment("");
+        showComment("Make your first match!");
         updateHud();
         render();
         tickId = setInterval(tick, TICK_MS);
@@ -96,7 +115,10 @@
         running = false;
         clearInterval(tickId);
         clearInterval(clockId);
+        saveBestScore();
         finalScoreEl.textContent = score;
+        finalBestScoreEl.textContent = bestScore;
+        bestScoreEl.textContent = bestScore;
         gameOverEl.hidden = false;
     }
 
@@ -119,6 +141,8 @@
 
     function updateHud() {
         scoreEl.textContent = score;
+        movesEl.textContent = moves;
+        bestScoreEl.textContent = bestScore;
         const m = Math.floor(timeLeft / 60);
         const s = String(timeLeft % 60).padStart(2, "0");
         timerEl.textContent = `${m}:${s}`;
@@ -204,6 +228,7 @@
             const type = grid[Math.floor(firstIndex / COLS)][firstIndex % COLS];
             matches.forEach(i => { grid[Math.floor(i / COLS)][i % COLS] = null; });
             score += matches.size * POINTS_PER_CANDY;
+            saveBestScore();
             showComment(MESSAGES[type] || "Service crushed!");
             playCrushSound();
             settled = false;
@@ -235,18 +260,38 @@
         };
 
         swap();
+        moves++;
+        updateHud();
         if (makesMatchAt(r1, c1) || makesMatchAt(r2, c2)) {
             settled = false; // tick() will now crush and refill
             render();
+            const a = tiles[r1][c1], b = tiles[r2][c2];
+            a.classList.add("swap-moving");
+            b.classList.add("swap-moving");
+            a.style.transform = `translate(${(c2 - c1) * 100}%, ${(r2 - r1) * 100}%)`;
+            b.style.transform = `translate(${(c1 - c2) * 100}%, ${(r1 - r2) * 100}%)`;
+            requestAnimationFrame(() => {
+                a.style.transform = "";
+                b.style.transform = "";
+                setTimeout(() => {
+                    a.classList.remove("swap-moving");
+                    b.classList.remove("swap-moving");
+                }, 160);
+            });
         } else {
-            // not a legal move: show it briefly, then put the candies back
+            // Briefly show the attempted swap, then return both services.
             render();
             busy = true;
+            const a = tiles[r1][c1], b = tiles[r2][c2];
+            a.classList.add("invalid-swap");
+            b.classList.add("invalid-swap");
             setTimeout(() => {
                 swap();
                 busy = false;
+                a.classList.remove("invalid-swap");
+                b.classList.remove("invalid-swap");
                 render();
-            }, 180);
+            }, 190);
         }
     }
 

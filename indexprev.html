@@ -1,33 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candy Crush</title>
-    <link rel="stylesheet" href="candy.css">
-    <script src="candy.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f6f7fb">
+  <title>AWS Candy Crush</title>
+  <link rel="stylesheet" href="candy.css">
+  <script src="candy.js" defer></script>
 </head>
+<body class="game-page">
+  <main class="game-shell">
+    <header class="game-header">
+      <a class="back-link" href="index.html" aria-label="Back to home">← Home</a>
+      <div class="brand-mark" aria-hidden="true">✦</div>
+      <p class="eyebrow">AWS SERVICE MATCH</p>
+      <h1>Cloud Crush</h1>
+      <p class="subtitle">Match three services. Build your score.</p>
+    </header>
 
-<body>
-    <div id="comments" aria-live="polite"></div>
+    <section class="stats" aria-label="Game statistics">
+      <div class="stat-card score-card"><span class="stat-label">SCORE</span><strong id="score">0</strong></div>
+      <div class="stat-card time-card"><span class="stat-label">TIME LEFT</span><strong id="timer">2:00</strong></div>
+      <div class="stat-card"><span class="stat-label">MOVES</span><strong id="moves">0</strong></div>
+      <div class="stat-card"><span class="stat-label">BEST</span><strong id="bestScore">0</strong></div>
+    </section>
 
-    <div class="hud">
-        <div class="score">Score: <span id="score">0</span></div>
-        <div class="timer">Time: <span id="timer">2:00</span></div>
+    <div class="game-status" aria-live="polite"><span class="status-dot"></span><span id="comments">Make your first match!</span></div>
+    <section class="board-frame" aria-label="Match three game">
+      <div id="board" aria-label="Game board"></div>
+    </section>
+    <p class="game-hint">Tap one service, then an adjacent one — or swipe to swap.</p>
+    <div class="game-footer"><span><span class="legend-dot"></span> Match 3 or more</span><span>+10 points per service</span></div>
+  </main>
+
+  <div id="gameOver" hidden>
+    <div class="card" role="dialog" aria-modal="true" aria-labelledby="gameOverTitle">
+      <div class="game-over-icon">✦</div>
+      <p class="eyebrow">ROUND COMPLETE</p>
+      <h2 id="gameOverTitle">Time's up!</h2>
+      <p class="final-label">Your final score</p>
+      <strong class="final-score" id="finalScore">0</strong>
+      <p class="best-result">Best score: <strong id="finalBestScore">0</strong></p>
+      <button id="playAgain" type="button">Play again <span aria-hidden="true">↻</span></button>
+      <a class="home-link" href="index.html">Back to home</a>
     </div>
+  </div>
 
-    <div id="board" aria-label="Game board"></div>
-
-    <div id="gameOver" hidden>
-        <div class="card">
-            <h2>Time's up!</h2>
-            <p>Your score: <strong id="finalScore">0</strong></p>
-            <button id="playAgain" type="button">Play again</button>
-        </div>
-    </div>
-
-    <audio id="crushSound" preload="auto">
-        <source src="crush.mp3" type="audio/mpeg">
-    </audio>
+  <audio id="crushSound" preload="auto"><source src="crush.mp3" type="audio/mpeg"></audio>
 </body>
 </html>

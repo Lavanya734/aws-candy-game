@@ -1,95 +1,14 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="cloud.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-    <title>In this game..</title>
-</head>
-<body>
-    <h1>Services in this Game:  <h1>
-        <div class="services">
-        <div class="S1" id="#service"><div class="header">
-            <img src="images/rds.png" id="images" class="s1-image">
-            <h2 id="s1-heading" class="heading">AWS Relational Database Service (AWS RDS)</h2></div>
-            <div id="s1-info" class="info">
-               Amazon Web Services (AWS) Relational Database Service (RDS) is a managed database 
-               service that simplifies the setup, operation, and scaling of relational databases 
-               in the cloud. It supports various database engines like MySQL, PostgreSQL, MariaDB, 
-               Oracle, and SQL Server.
-               <span id="more">RDS automates time-consuming tasks such as backups, software 
-               patching, and hardware provisioning, allowing developers to focus on application 
-               development while ensuring high availability, security, and performance. </span>
-            </div><br>
-        </div>
-            <div class="S3" id="#service"><div class="header">
-            <img src="images/cloud9.png" id="images" class="s2-image">
-            <h2 id="s2-heading" class="heading">AWS Cloud9</h2></div>
-            <div id="s2-info" class="info">
-            AWS Cloud9 is a cloud-based integrated development environment (IDE) that enables users to write,
-            run, and debug code with just a browser. It supports popular programming languages, offers 
-            collaborative coding features, and integrates seamlessly with AWS services. Cloud9 provides
-               <span id="more">a preconfigured environment with essential tools, making it easy to develop serverless 
-                applications, manage instances, and enhance productivity, all while eliminating the need 
-                for local setup and configuration.</span>
-                
-            </div><br>
-        </div>
-         <div class="S3" id="#service"><div class="header">
-            <img src="images/s3.png" id="images" class="s3-image">
-            <h2 id="s3-heading" class="heading">AWS Simple Storage Service (AWS S3)</h2></div>
-            <div id="s3-info" class="info">
-                Amazon Web Services Simple Storage Service (AWS S3) is a scalable, high-speed, web-based cloud storage
-                service designed for data storage and retrieval. S3 provides durable object storage infrastructure with 
-                features like data encryption, versioning, and lifecycle policies, 
-               <span id="more">making it ideal for a wide range of use cases including backups, big data analytics, and content distribution. It ensures high availability 
-                and redundancy, allowing users to store and access vast amounts of data securely and efficiently.
-                
-            </div><br>
-        </div>
-                 <div class="S4" id="#service"><div class="header">
-            <img src="images/ec2.png" id="images" class="s4-image">
-            <h2 id="s4-heading" class="heading">AWS Elastic Compute Cloud (AWS E2C)</h2></div>
-            <div id="s4-info" class="info">
-                AWS EC2 (Elastic Compute Cloud) is a web service that provides scalable computing capacity in the cloud. 
-                It allows users to launch virtual servers, known as instances, with customizable configurations to suit 
-                their computational needs.
-               <span id="more">EC2 supports a variety of operating systems, and integrates with other AWS 
-                services for enhanced functionality. With features like auto-scaling and load balancing, EC2 enables 
-                efficient resource management, ensuring high availability and reliability for applications.
-               </span>
-            </div><br>
-        </div>
-         <div class="S5" id="#service"><div class="header">
-            <img src="images/lake.png" id="images" class="s5-image">
-            <h2 id="s5-heading" class="heading">AWS Lake Formation</h2></div>
-            <div id="s5-info" class="info">
-                AWS Lake Formation is a managed service that simplifies and accelerates the process of building 
-                secure data lakes. It allows users to collect, store, catalog, and clean their data from various
-                sources, enabling efficient data analysis and machine learning. With features like automated data
-               <span id="more">discovery, transformation, and security enforcement, AWS Lake Formation helps organizations streamline 
-                data lake management, ensuring data is easily accessible and securely governed for analytics and 
-                business insights.
-              </span>
-            </div><br>
-        </div>
-         <div class="S6" id="#service"><div class="header">
-            <img src="images/event.png" id="images" class="s6-image">
-            <h2 id="s6-heading" class="heading">AWS Event Bridge</h2></div>
-            <div id="s6-info" class="info">
-                AWS EventBridge is a serverless event bus service that allows applications to connect using data from 
-                various sources. It facilitates the building of event-driven architectures by routing real-time data 
-                from integrated AWS services, custom applications, and SaaS providers.
-               <span id="more">EventBridge enables seamless, 
-                scalable event ingestion and processing, simplifying workflows and application integrations without 
-                the need for custom coding or infrastructure management, thereby enhancing agility and reducing 
-                operational complexity.
-              </span>
-            </div><br>
-        </div>
-        </div>
-</body>
-</html>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+* { box-sizing: border-box; }
+body { margin: 0; padding: 34px 20px 50px; color: #202538; font-family: 'DM Sans', Arial, sans-serif; background: #f6f7fb; }
+body > h1 { max-width: 1000px; margin: 0 auto 8px; font: 700 clamp(28px,5vw,40px)/1.15 'Space Grotesk',sans-serif; letter-spacing: -.04em; }
+body > h1::after { content: 'Explore the AWS services featured in the game.'; display: block; margin-top: 10px; color: #777f91; font: 400 14px 'DM Sans',sans-serif; letter-spacing: 0; }
+.services { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; max-width: 1000px; margin: 28px auto 0; }
+.services > div { min-width: 0; padding: 20px; border: 1px solid #e7e9f0; border-radius: 18px; background: white; box-shadow: 0 6px 20px rgba(39,45,76,.035); transition: transform .16s ease, box-shadow .16s ease; }
+.services > div:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(39,45,76,.07); }
+.header { display: flex; align-items: center; gap: 15px; min-height: 76px; }
+#images { flex: 0 0 68px; width: 68px; height: 68px; margin: 0; object-fit: contain; }
+.heading { margin: 0; font: 700 clamp(16px,2vw,20px)/1.25 'Space Grotesk',sans-serif; }
+.info { margin-top: 14px; color: #687084; font-size: 13px; line-height: 1.7; }
+#more { color: #687084; }
+@media (max-width: 640px) { body { padding: 24px 14px 36px; } .services { grid-template-columns: 1fr; gap: 12px; margin-top: 20px; } .services > div { padding: 16px; } }
