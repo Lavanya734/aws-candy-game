@@ -1,0 +1,104 @@
+:root {
+  --board: min(92vw, 540px);
+}
+@supports (height: 100svh) {
+  :root { --board: min(92vw, calc(100svh - 190px), 540px); }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: url("./images/bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  text-align: center;
+  margin: 0;
+  padding: 8px 0 16px;
+  min-height: 100vh;
+}
+
+/* message line has a fixed height so the board never jumps when it appears */
+#comments {
+  height: 28px;
+  line-height: 28px;
+  font-size: 20px;
+  font-weight: bold;
+  color: yellow;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+#comments.show { opacity: 1; }
+
+.hud {
+  width: var(--board);
+  margin: 4px auto 8px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+#board {
+  width: var(--board);
+  height: var(--board);
+  margin: 0 auto;
+  padding: 4px;
+  gap: 2px;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: repeat(9, 1fr);
+  background-color: lightblue;
+  border: 5px solid slategray;
+  border-radius: 10px;
+  touch-action: none;           /* lets swipes reach the game instead of scrolling the page */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+#board img {
+  width: 100%;
+  height: 100%;
+  padding: 3px;
+  object-fit: contain;
+  border-radius: 50%;
+  cursor: pointer;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+  transition: transform 0.12s;
+}
+#board img.empty { visibility: hidden; }
+#board img.selected {
+  transform: scale(1.12);
+  background: rgba(255, 235, 59, 0.55);
+}
+
+#gameOver {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 10;
+}
+#gameOver[hidden] { display: none; }
+#gameOver .card {
+  background: #fff;
+  color: #222;
+  padding: 24px 32px;
+  border-radius: 14px;
+  min-width: 240px;
+}
+#gameOver h2 { margin: 0 0 8px; }
+#gameOver button {
+  margin-top: 12px;
+  padding: 10px 24px;
+  font-size: 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #ff9900;
+  color: #111;
+  font-weight: bold;
+  cursor: pointer;
+}

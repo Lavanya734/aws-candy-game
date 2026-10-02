@@ -1,0 +1,314 @@
+(() => {
+    const ROWS = 9;
+    const COLS = 9;
+    const GAME_SECONDS = 120;
+    const TICK_MS = 90;          // speed of falling / crushing animation
+    const POINTS_PER_CANDY = 10; // a match of 3 = 30 points, like the original
+
+    const CANDIES = ["rds", "lake", "ec2", "s3", "event", "cloud9"];
+    const MESSAGES = {
+        rds: "Aurora DB service crushed!",
+        lake: "Lake Formation service crushed!",
+        ec2: "EC2 service crushed!",
+        s3: "S3 service crushed!",
+        event: "EventBridge service crushed!",
+        cloud9: "Cloud9 IDE service crushed!"
+    };
+
+    const boardEl = document.getElementById("board");
+    const scoreEl = document.getElementById("score");
+    const timerEl = document.getElementById("timer");
+    const commentsEl = document.getElementById("comments");
+    const crushSound = document.getElementById("crushSound");
+    const gameOverEl = document.getElementById("gameOver");
+    const finalScoreEl = document.getElementById("finalScore");
+    const playAgainBtn = document.getElementById("playAgain");
+
+    let grid = [];   // grid[r][c] = candy name, or null while empty
+    let tiles = [];  // tiles[r][c] = <img> element
+    let score = 0;
+    let timeLeft = GAME_SECONDS;
+    let running = false;
+    let settled = true;  // true when nothing is falling or waiting to be crushed
+    let busy = false;    // true during the "invalid move" bounce-back
+    let selected = null; // tile chosen by tapping
+    let drag = null;     // current pointer gesture
+    let tickId = null;
+    let clockId = null;
+    let commentTimeout = null;
+
+    const randomCandy = () => CANDIES[Math.floor(Math.random() * CANDIES.length)];
+
+    /* ---------- setup ---------- */
+
+    function createTiles() {
+        for (let r = 0; r < ROWS; r++) {
+            tiles.push([]);
+            for (let c = 0; c < COLS; c++) {
+                const img = document.createElement("img");
+                img.draggable = false;
+                img.alt = "";
+                img.dataset.r = r;
+                img.dataset.c = c;
+                boardEl.append(img);
+                tiles[r].push(img);
+            }
+        }
+    }
+
+    function fillBoardWithoutMatches() {
+        grid = [];
+        for (let r = 0; r < ROWS; r++) {
+            grid.push([]);
+            for (let c = 0; c < COLS; c++) {
+                let type;
+                do {
+                    type = randomCandy();
+                } while (
+                    (c >= 2 && grid[r][c - 1] === type && grid[r][c - 2] === type) ||
+                    (r >= 2 && grid[r - 1][c] === type && grid[r - 2][c] === type)
+                );
+                grid[r].push(type);
+            }
+        }
+    }
+
+    function newGame() {
+        clearInterval(tickId);
+        clearInterval(clockId);
+        fillBoardWithoutMatches();
+        score = 0;
+        timeLeft = GAME_SECONDS;
+        running = true;
+        settled = true;
+        busy = false;
+        selected = null;
+        drag = null;
+        gameOverEl.hidden = true;
+        showComment("");
+        updateHud();
+        render();
+        tickId = setInterval(tick, TICK_MS);
+        clockId = setInterval(clockTick, 1000);
+    }
+
+    function endGame() {
+        running = false;
+        clearInterval(tickId);
+        clearInterval(clockId);
+        finalScoreEl.textContent = score;
+        gameOverEl.hidden = false;
+    }
+
+    /* ---------- drawing ---------- */
+
+    function render() {
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                const img = tiles[r][c];
+                const type = grid[r][c];
+                if ((img.dataset.type || "") !== (type || "")) {
+                    img.dataset.type = type || "";
+                    if (type) img.src = `./images/${type}.png`;
+                }
+                img.classList.toggle("empty", !type);
+                img.classList.toggle("selected", !!selected && selected.r === r && selected.c === c);
+            }
+        }
+    }
+
+    function updateHud() {
+        scoreEl.textContent = score;
+        const m = Math.floor(timeLeft / 60);
+        const s = String(timeLeft % 60).padStart(2, "0");
+        timerEl.textContent = `${m}:${s}`;
+    }
+
+    function showComment(text) {
+        clearTimeout(commentTimeout);
+        commentsEl.textContent = text;
+        commentsEl.classList.toggle("show", !!text);
+        if (text) {
+            commentTimeout = setTimeout(() => commentsEl.classList.remove("show"), 1500);
+        }
+    }
+
+    function playCrushSound() {
+        try {
+            crushSound.currentTime = 0;
+            const p = crushSound.play();
+            if (p && p.catch) p.catch(() => {}); // browsers may block audio until the player interacts
+        } catch (e) { /* ignore */ }
+    }
+
+    /* ---------- game rules ---------- */
+
+    // length of the same-candy run through (r, c) along one direction
+    function runLength(r, c, dr, dc) {
+        const type = grid[r][c];
+        if (!type) return 0;
+        let n = 1;
+        for (let i = 1; ; i++) {
+            const rr = r + dr * i, cc = c + dc * i;
+            if (rr < 0 || rr >= ROWS || cc < 0 || cc >= COLS || grid[rr][cc] !== type) break;
+            n++;
+        }
+        for (let i = 1; ; i++) {
+            const rr = r - dr * i, cc = c - dc * i;
+            if (rr < 0 || rr >= ROWS || cc < 0 || cc >= COLS || grid[rr][cc] !== type) break;
+            n++;
+        }
+        return n;
+    }
+
+    function makesMatchAt(r, c) {
+        return runLength(r, c, 0, 1) >= 3 || runLength(r, c, 1, 0) >= 3;
+    }
+
+    function findMatches() {
+        const found = new Set();
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLS; c++) {
+                if (grid[r][c] && makesMatchAt(r, c)) found.add(r * COLS + c);
+            }
+        }
+        return found;
+    }
+
+    function hasEmpty() {
+        return grid.some(row => row.some(cell => cell === null));
+    }
+
+    // one animation step: fall one row, or crush whatever matches
+    function tick() {
+        if (!running) return;
+
+        if (hasEmpty()) {
+            for (let c = 0; c < COLS; c++) {
+                for (let r = ROWS - 2; r >= 0; r--) {
+                    if (grid[r][c] && !grid[r + 1][c]) {
+                        grid[r + 1][c] = grid[r][c];
+                        grid[r][c] = null;
+                    }
+                }
+                if (!grid[0][c]) grid[0][c] = randomCandy();
+            }
+            settled = false;
+            render();
+            return;
+        }
+
+        const matches = findMatches();
+        if (matches.size) {
+            const firstIndex = matches.values().next().value;
+            const type = grid[Math.floor(firstIndex / COLS)][firstIndex % COLS];
+            matches.forEach(i => { grid[Math.floor(i / COLS)][i % COLS] = null; });
+            score += matches.size * POINTS_PER_CANDY;
+            showComment(MESSAGES[type] || "Service crushed!");
+            playCrushSound();
+            settled = false;
+            updateHud();
+            render();
+            return;
+        }
+
+        settled = true;
+    }
+
+    function clockTick() {
+        if (!running) return;
+        timeLeft--;
+        updateHud();
+        if (timeLeft <= 0) endGame();
+    }
+
+    function trySwap(r1, c1, r2, c2) {
+        if (!running || !settled || busy) return;
+        if (r2 < 0 || r2 >= ROWS || c2 < 0 || c2 >= COLS) return;
+        if (Math.abs(r1 - r2) + Math.abs(c1 - c2) !== 1) return;
+        if (!grid[r1][c1] || !grid[r2][c2]) return;
+
+        const swap = () => {
+            const tmp = grid[r1][c1];
+            grid[r1][c1] = grid[r2][c2];
+            grid[r2][c2] = tmp;
+        };
+
+        swap();
+        if (makesMatchAt(r1, c1) || makesMatchAt(r2, c2)) {
+            settled = false; // tick() will now crush and refill
+            render();
+        } else {
+            // not a legal move: show it briefly, then put the candies back
+            render();
+            busy = true;
+            setTimeout(() => {
+                swap();
+                busy = false;
+                render();
+            }, 180);
+        }
+    }
+
+    /* ---------- input (mouse, touch and pen all go through pointer events) ---------- */
+
+    function handleTap(r, c) {
+        if (!running || !settled || busy) return;
+        if (!selected) {
+            selected = { r, c };
+        } else if (selected.r === r && selected.c === c) {
+            selected = null;
+        } else if (Math.abs(selected.r - r) + Math.abs(selected.c - c) === 1) {
+            const s = selected;
+            selected = null;
+            trySwap(s.r, s.c, r, c);
+        } else {
+            selected = { r, c };
+        }
+        render();
+    }
+
+    boardEl.addEventListener("pointerdown", e => {
+        const img = e.target.closest("img");
+        if (!img) return;
+        e.preventDefault();
+        try { boardEl.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
+        drag = {
+            r: Number(img.dataset.r),
+            c: Number(img.dataset.c),
+            x: e.clientX,
+            y: e.clientY,
+            id: e.pointerId,
+            swiped: false
+        };
+    });
+
+    boardEl.addEventListener("pointermove", e => {
+        if (!drag || drag.swiped || e.pointerId !== drag.id) return;
+        const dx = e.clientX - drag.x;
+        const dy = e.clientY - drag.y;
+        const threshold = (boardEl.clientWidth / COLS) * 0.35;
+        if (Math.max(Math.abs(dx), Math.abs(dy)) < threshold) return;
+
+        drag.swiped = true;
+        let r2 = drag.r, c2 = drag.c;
+        if (Math.abs(dx) > Math.abs(dy)) c2 += dx > 0 ? 1 : -1;
+        else r2 += dy > 0 ? 1 : -1;
+        selected = null;
+        render();
+        trySwap(drag.r, drag.c, r2, c2);
+    });
+
+    boardEl.addEventListener("pointerup", e => {
+        if (!drag || e.pointerId !== drag.id) return;
+        if (!drag.swiped) handleTap(drag.r, drag.c); // a tap or click without movement
+        drag = null;
+    });
+
+    boardEl.addEventListener("pointercancel", () => { drag = null; });
+
+    playAgainBtn.addEventListener("click", newGame);
+
+    createTiles();
+    newGame();
+})();

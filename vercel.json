@@ -1,0 +1,5 @@
+{
+  "redirects": [
+    { "source": "/", "destination": "/candy-crush-master/", "permanent": false }
+  ]
+}

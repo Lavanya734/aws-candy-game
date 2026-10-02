@@ -1,0 +1,211 @@
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+    background: url('./images/Untitled design (1).png') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    text-align: center;
+}
+
+.buttons {
+    margin-top: 300px;
+}
+
+button {
+    position: relative;
+    background: linear-gradient(45deg, #71d9ff, #ff71ce);
+    border: 2px solid #ff71ce;
+    color: white;
+    padding: 15px 40px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    margin: 10px 20px;
+    cursor: pointer;
+    border-radius: 20px;
+    font-weight: bold;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    z-index: 0;
+    background-size: 200% 200%;
+    animation: gradient-shift 5s ease infinite, pulse 2s infinite;
+}
+
+button:before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 20%, transparent 20%);
+    background-size: 50% 50%;
+    animation: button-glow 3s infinite;
+    opacity: 0.7;
+    z-index: -1;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #63c2e7, #e763b7);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.3);
+}
+
+button:active {
+    background: linear-gradient(45deg, #5ab6d5, #d55aad);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+@keyframes button-glow {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes sparkle {
+    0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(5px, 5px) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(10px, 10px) scale(0);
+    }
+}
+
+button .sparkles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+button .sparkle {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    background: white;
+    border-radius: 50%;
+    opacity: 0;
+    animation: sparkle 2s infinite;
+}
+
+button .sparkle:nth-child(1) {
+    top: 20%;
+    left: 25%;
+    animation-delay: 0s;
+}
+
+button .sparkle:nth-child(2) {
+    top: 50%;
+    left: 50%;
+    animation-delay: 0.2s;
+}
+
+button .sparkle:nth-child(3) {
+    top: 75%;
+    left: 75%;
+    animation-delay: 0.4s;
+}
+
+button .sparkle:nth-child(4) {
+    top: 30%;
+    left: 70%;
+    animation-delay: 0.6s;
+}
+
+button .sparkle:nth-child(5) {
+    top: 60%;
+    left: 20%;
+    animation-delay: 0.8s;
+}
+
+button .sparkle:nth-child(6) {
+    top: 15%;
+    left: 80%;
+    animation-delay: 1s;
+}
+
+button .sparkle:nth-child(7) {
+    top: 85%;
+    left: 40%;
+    animation-delay: 1.2s;
+}
+
+button .sparkle:nth-child(8) {
+    top: 40%;
+    left: 90%;
+    animation-delay: 1.4s;
+}
+
+button .sparkle:nth-child(9) {
+    top: 65%;
+    left: 10%;
+    animation-delay: 1.6s;
+}
+
+button .sparkle:nth-child(10) {
+    top: 10%;
+    left: 50%;
+    animation-delay: 1.8s;
+}
+
+/* Dark theme styles for the retrieve button */
+#retrieveButton.dark-theme {
+    background: linear-gradient(45deg, #7d30bc, #e646ff); /* Darker gradient */
+    border: 2px solid #120036; /* Darker border */
+}
+
+#retrieveButton.dark-theme:hover {
+    background: linear-gradient(45deg, #7424c9, #a925ab); /* Darker hover gradient */
+}
+
+#retrieveButton.dark-theme:active {
+    background: linear-gradient(45deg, #65009c, #cd16d6); /* Darker active gradient */
+}
