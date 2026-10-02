@@ -1,14 +1,73 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
-* { box-sizing: border-box; }
-body { margin: 0; padding: 34px 20px 50px; color: #202538; font-family: 'DM Sans', Arial, sans-serif; background: #f6f7fb; }
-body > h1 { max-width: 1000px; margin: 0 auto 8px; font: 700 clamp(28px,5vw,40px)/1.15 'Space Grotesk',sans-serif; letter-spacing: -.04em; }
-body > h1::after { content: 'Explore the AWS services featured in the game.'; display: block; margin-top: 10px; color: #777f91; font: 400 14px 'DM Sans',sans-serif; letter-spacing: 0; }
-.services { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; max-width: 1000px; margin: 28px auto 0; }
-.services > div { min-width: 0; padding: 20px; border: 1px solid #e7e9f0; border-radius: 18px; background: white; box-shadow: 0 6px 20px rgba(39,45,76,.035); transition: transform .16s ease, box-shadow .16s ease; }
-.services > div:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(39,45,76,.07); }
-.header { display: flex; align-items: center; gap: 15px; min-height: 76px; }
-#images { flex: 0 0 68px; width: 68px; height: 68px; margin: 0; object-fit: contain; }
-.heading { margin: 0; font: 700 clamp(16px,2vw,20px)/1.25 'Space Grotesk',sans-serif; }
-.info { margin-top: 14px; color: #687084; font-size: 13px; line-height: 1.7; }
-#more { color: #687084; }
-@media (max-width: 640px) { body { padding: 24px 14px 36px; } .services { grid-template-columns: 1fr; gap: 12px; margin-top: 20px; } .services > div { padding: 16px; } }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A beginner-friendly guide to common AWS cloud services featured in Cloud Crush.">
+  <title>Explore AWS Services | Cloud Crush</title>
+  <link rel="stylesheet" href="cloud.css">
+</head>
+<body>
+  <main class="page-shell">
+    <a class="back-link" href="index.html">← Back to home</a>
+
+    <header class="hero">
+      <span class="eyebrow">☁️ CLOUD CRUSH FIELD GUIDE</span>
+      <h1>Meet your cloud crew<span>!</span></h1>
+      <p>Get to know the AWS services that help apps run, store data, stay secure, and reach people around the world.</p>
+      <div class="hero-clouds" aria-hidden="true"><span>☁️</span><span>☁️</span><span>☁️</span></div>
+    </header>
+
+    <section class="services-grid" aria-label="Common AWS services">
+      <article class="service-card orange">
+        <div class="service-icon" aria-hidden="true">🖥️</div>
+        <div class="service-content"><span class="category">COMPUTE</span><h2>Amazon EC2</h2><p>Rent virtual servers in the cloud to run websites, apps, and backend code.</p><a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html" target="_blank" rel="noopener noreferrer">Explore EC2 ↗</a></div>
+      </article>
+      <article class="service-card purple">
+        <div class="service-icon" aria-hidden="true">🪣</div>
+        <div class="service-content"><span class="category">STORAGE</span><h2>Amazon S3</h2><p>Store and retrieve files such as photos, videos, documents, and backups.</p><a href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html" target="_blank" rel="noopener noreferrer">Explore S3 ↗</a></div>
+      </article>
+      <article class="service-card blue">
+        <div class="service-icon" aria-hidden="true">🗃️</div>
+        <div class="service-content"><span class="category">DATABASE</span><h2>Amazon RDS</h2><p>Set up and manage relational databases without handling every maintenance task yourself.</p><a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Welcome.html" target="_blank" rel="noopener noreferrer">Explore RDS ↗</a></div>
+      </article>
+      <article class="service-card pink">
+        <div class="service-icon" aria-hidden="true">🔐</div>
+        <div class="service-content"><span class="category">IDENTITY & ACCESS</span><h2>AWS IAM</h2><p>Manage users, roles, and permissions to control who can access AWS resources.</p><a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html" target="_blank" rel="noopener noreferrer">Explore IAM ↗</a></div>
+      </article>
+      <article class="service-card green">
+        <div class="service-icon" aria-hidden="true">🌍</div>
+        <div class="service-content"><span class="category">CONTENT DELIVERY</span><h2>Amazon CloudFront</h2><p>Deliver website content and files through a global content delivery network.</p><a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Introduction.html" target="_blank" rel="noopener noreferrer">Explore CloudFront ↗</a></div>
+      </article>
+      <article class="service-card yellow">
+        <div class="service-icon" aria-hidden="true">📈</div>
+        <div class="service-content"><span class="category">MONITORING</span><h2>Amazon CloudWatch</h2><p>Collect metrics and logs to monitor applications and investigate issues.</p><a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html" target="_blank" rel="noopener noreferrer">Explore CloudWatch ↗</a></div>
+      </article>
+      <article class="service-card cyan">
+        <div class="service-icon" aria-hidden="true">⚡</div>
+        <div class="service-content"><span class="category">SERVERLESS COMPUTE</span><h2>AWS Lambda</h2><p>Run code when an event happens without managing the underlying servers.</p><a href="https://docs.aws.amazon.com/lambda/latest/dg/welcome.html" target="_blank" rel="noopener noreferrer">Explore Lambda ↗</a></div>
+      </article>
+      <article class="service-card coral">
+        <div class="service-icon" aria-hidden="true">🔌</div>
+        <div class="service-content"><span class="category">APPLICATION INTEGRATION</span><h2>Amazon API Gateway</h2><p>Create and manage APIs that let apps and services communicate with each other.</p><a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html" target="_blank" rel="noopener noreferrer">Explore API Gateway ↗</a></div>
+      </article>
+      <article class="service-card mint">
+        <div class="service-icon" aria-hidden="true">🧱</div>
+        <div class="service-content"><span class="category">CONTAINERS</span><h2>Amazon ECS</h2><p>Deploy and manage applications packaged in containers.</p><a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/Welcome.html" target="_blank" rel="noopener noreferrer">Explore ECS ↗</a></div>
+      </article>
+      <article class="service-card lavender">
+        <div class="service-icon" aria-hidden="true">🧠</div>
+        <div class="service-content"><span class="category">AI & MACHINE LEARNING</span><h2>Amazon Bedrock</h2><p>Build generative AI applications using foundation models through AWS.</p><a href="https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html" target="_blank" rel="noopener noreferrer">Explore Bedrock ↗</a></div>
+      </article>
+    </section>
+
+    <footer class="footer-card">
+      <p class="footer-kicker">POWER-UP COMPLETE ✨</p>
+      <h2>Ready for another round?</h2>
+      <p>Head back to the board and match those AWS icons.</p>
+      <a class="play-button" href="indexprev.html">🎮 Back to Cloud Crush</a>
+    </footer>
+    <p class="source-note">Service descriptions are simplified for learning. For full details, open the official AWS documentation links on each card.</p>
+  </main>
+</body>
+</html>

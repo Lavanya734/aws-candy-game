@@ -3,20 +3,48 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#f6f7fb">
-  <title>AWS Candy Crush — Cloud Crush</title>
+  <meta name="theme-color" content="#fff5fb">
+  <title>Cloud Crush — AWS Match Game</title>
   <link rel="stylesheet" href="main.css">
 </head>
-<body>
-  <main class="container">
-    <p class="eyebrow">A LITTLE CLOUD-SIDE CHALLENGE</p>
-    <h1>Cloud Crush</h1>
-    <p class="intro">Match AWS services, clear the board, and beat your best score.</p>
-    <div class="buttons">
-      <a class="primary-link" href="indexprev.html">Play game <span aria-hidden="true">→</span></a>
-      <a class="secondary-link" href="Cloud-into.html">Know the services</a>
+<body class="landing-page">
+  <main class="arcade">
+    <div class="cloud cloud-one" aria-hidden="true">☁</div>
+    <div class="cloud cloud-two" aria-hidden="true">☁</div>
+    <div class="sparkle sparkle-one" aria-hidden="true">✦</div>
+    <div class="sparkle sparkle-two" aria-hidden="true">✧</div>
+    <div class="sparkle sparkle-three" aria-hidden="true">✳</div>
+
+    <div class="game-sticker sticker-top">✦ CLOUDY FUN ✦</div>
+    <p class="mini-kicker">THE AWS MATCHING GAME</p>
+    <h1>Cloud <span>Crush!</span></h1>
+    <p class="tagline">Match the services. Make a combo. Crush your high score!</p>
+
+    <section class="tile-playground" aria-label="Colourful preview of game tiles">
+      <div class="play-tile tile-ec2"><span>☁</span><small>EC2</small></div>
+      <div class="play-tile tile-s3"><span>▣</span><small>S3</small></div>
+      <div class="play-tile tile-lambda"><span>λ</span><small>Lambda</small></div>
+      <div class="play-tile tile-rds"><span>◉</span><small>RDS</small></div>
+      <div class="play-tile tile-cloud9"><span>⌘</span><small>Cloud9</small></div>
+      <div class="combo-sticker">SWEET!<br><strong>COMBO ×3</strong> ✨</div>
+    </section>
+
+    <div class="action-area">
+      <a class="play-button" href="indexprev.html">
+        <span class="play-icon" aria-hidden="true">▶</span>
+        LET'S PLAY!
+        <span class="play-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="learn-link" href="Cloud-into.html">Need a hint? <span>Explore AWS services ☁</span></a>
     </div>
-    <div class="service-chips" aria-label="Featured services"><span>EC2</span><span>S3</span><span>RDS</span><span>Cloud9</span><span>EventBridge</span></div>
+
+    <div class="bottom-doodle" aria-hidden="true">
+      <span class="doodle-cloud">☁</span>
+      <span class="doodle-text">MATCH 3 OR MORE</span>
+      <span class="doodle-star">★</span>
+      <span class="doodle-text">HAVE A BLAST!</span>
+      <span class="doodle-cloud">☁</span>
+    </div>
   </main>
 </body>
 </html>
