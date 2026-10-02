@@ -1,53 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#fff7f0">
-  <title>AWS Candy Crush — Cloud Crush</title>
-  <link rel="stylesheet" href="candy.css">
-  <script src="candy.js" defer></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fff7f0">
+    <title>AWS Candy Crush — Cloud Crush</title>
+    <link rel="stylesheet" href="candy.css">
+    <script src="candy.js" defer></script>
+    <link rel="icon" type="image/png" href="images/candy-game-favicon.png">
 </head>
+
 <body class="game-page">
-  <main class="game-layout">
-    <section class="play-area" aria-label="Game board area">
-      <div class="board-heading"><span class="live-pill"><span></span> LIVE ROUND</span><span class="board-caption">MATCH 3 OR MORE · +10 PER SERVICE</span></div>
-      <section class="board-frame" aria-label="Match three game">
-        <div id="board" aria-label="Game board"></div>
-        <svg id="matchFx" class="match-fx" aria-hidden="true"></svg>
-      </section>
-      <div class="play-hint"><span class="hint-icon">↔</span><span><strong>How to play</strong><br>Swipe a service toward an adjacent tile, or tap two neighbouring tiles to swap.</span></div>
-    </section>
+    <main class="game-layout">
+        <section class="play-area" aria-label="Game board area">
+            <div class="board-heading"><span class="live-pill"><span></span> LIVE ROUND</span><span
+                    class="board-caption">MATCH 3 OR MORE · +10 PER SERVICE</span></div>
+            <section class="board-frame" aria-label="Match three game">
+                <div id="board" aria-label="Game board"></div>
+                <svg id="matchFx" class="match-fx" aria-hidden="true"></svg>
+            </section>
+            <div class="play-hint"><span class="hint-icon">↔</span><span><strong>How to play</strong><br>Swipe a service
+                    toward an adjacent tile, or tap two neighbouring tiles to swap.</span></div>
+        </section>
 
-    <aside class="game-sidebar">
-      <a class="back-link" href="index.html"><span aria-hidden="true">⌂</span> Main Menu</a>
-      <div class="brand-mark" aria-hidden="true">✦</div>
-      <p class="eyebrow">AWS SERVICE MATCH</p>
-      <h1>Cloud <span>Crush</span></h1>
-      <p class="subtitle">A little cloud-side challenge. Match AWS services, clear the board, and beat your best score.</p>
+        <aside class="game-sidebar">
+            <a class="back-link" href="index.html"><span aria-hidden="true">⌂</span> Main Menu</a>
+            <div class="brand-mark" aria-hidden="true">✦</div>
+            <p class="eyebrow">AWS SERVICE MATCH</p>
+            <h1>Cloud <span>Crush</span></h1>
+            <p class="subtitle">A little cloud-side challenge. Match AWS services, clear the board, and beat your best
+                score.</p>
 
-      <section class="stats" aria-label="Game statistics">
-        <div class="stat-card score-card"><span class="stat-icon">✦</span><span class="stat-label">SCORE</span><strong id="score">0</strong></div>
-        <div class="stat-card time-card"><span class="stat-icon">◷</span><span class="stat-label">TIME LEFT</span><strong id="timer">2:00</strong></div>
-        <div class="stat-card moves-card"><span class="stat-icon">↔</span><span class="stat-label">MOVES</span><strong id="moves">0</strong></div>
-        <div class="stat-card best-card"><span class="stat-icon">★</span><span class="stat-label">BEST SCORE</span><strong id="bestScore">0</strong></div>
-      </section>
+            <section class="stats" aria-label="Game statistics">
+                <div class="stat-card score-card"><span class="stat-icon">✦</span><span
+                        class="stat-label">SCORE</span><strong id="score">0</strong></div>
+                <div class="stat-card time-card"><span class="stat-icon">◷</span><span class="stat-label">TIME
+                        LEFT</span><strong id="timer">2:00</strong></div>
+                <div class="stat-card moves-card"><span class="stat-icon">↔</span><span
+                        class="stat-label">MOVES</span><strong id="moves">0</strong></div>
+                <div class="stat-card best-card"><span class="stat-icon">★</span><span class="stat-label">BEST
+                        SCORE</span><strong id="bestScore">0</strong></div>
+            </section>
 
-      <div class="status-panel" aria-live="polite"><span class="status-orb">✦</span><div><span class="status-label">BOARD STATUS</span><span id="comments">Make your first match!</span></div></div>
-      <div class="sidebar-tip"><span>☁</span><div><strong>Quick tip</strong><p>Look for a move that sets up your next match, not just the first one you see.</p></div></div>
-      <div class="service-legend"><span class="legend-dot purple"></span><span class="legend-dot orange"></span><span class="legend-dot blue"></span><span class="legend-dot pink"></span><span class="legend-dot green"></span><span class="legend-dot yellow"></span><span>6 cloud services in play</span></div>
-    </aside>
-  </main>
+            <div class="status-panel" aria-live="polite"><span class="status-orb">✦</span>
+                <div><span class="status-label">BOARD STATUS</span><span id="comments">Make your first match!</span>
+                </div>
+            </div>
+            <div class="sidebar-tip"><span>☁</span>
+                <div><strong>Quick tip</strong>
+                    <p>Look for a move that sets up your next match, not just the first one you see.</p>
+                </div>
+            </div>
+            <div class="service-legend"><span class="legend-dot purple"></span><span
+                    class="legend-dot orange"></span><span class="legend-dot blue"></span><span
+                    class="legend-dot pink"></span><span class="legend-dot green"></span><span
+                    class="legend-dot yellow"></span><span>6 cloud services in play</span></div>
+        </aside>
+    </main>
 
-  <div id="gameOver" hidden>
-    <div class="card" role="dialog" aria-modal="true" aria-labelledby="gameOverTitle">
-      <div class="game-over-icon">✦</div><p class="eyebrow">ROUND COMPLETE</p><h2 id="gameOverTitle">Time's up!</h2>
-      <p class="final-label">Your final score</p><strong class="final-score" id="finalScore">0</strong>
-      <p class="best-result">Best score: <strong id="finalBestScore">0</strong></p>
-      <button id="playAgain" type="button">Play again <span aria-hidden="true">↻</span></button>
-      <a class="home-link" href="index.html">← Return to Main Menu</a>
+    <div id="gameOver" hidden>
+        <div class="card" role="dialog" aria-modal="true" aria-labelledby="gameOverTitle">
+            <div class="game-over-icon">✦</div>
+            <p class="eyebrow">ROUND COMPLETE</p>
+            <h2 id="gameOverTitle">Time's up!</h2>
+            <p class="final-label">Your final score</p><strong class="final-score" id="finalScore">0</strong>
+            <p class="best-result">Best score: <strong id="finalBestScore">0</strong></p>
+            <button id="playAgain" type="button">Play again <span aria-hidden="true">↻</span></button>
+            <a class="home-link" href="index.html">← Return to Main Menu</a>
+        </div>
     </div>
-  </div>
-  <audio id="crushSound" preload="auto"><source src="crush.mp3" type="audio/mpeg"></audio>
+    <audio id="crushSound" preload="auto">
+        <source src="crush.mp3" type="audio/mpeg">
+    </audio>
 </body>
+
 </html>
