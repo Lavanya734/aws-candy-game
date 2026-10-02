@@ -16,6 +16,7 @@
     };
 
     const boardEl = document.getElementById("board");
+    const matchFx = document.getElementById("matchFx");
     const scoreEl = document.getElementById("score");
     const timerEl = document.getElementById("timer");
     const commentsEl = document.getElementById("comments");
@@ -41,6 +42,7 @@
     let tickId = null;
     let clockId = null;
     let commentTimeout = null;
+    let processingMatches = false;
 
     const randomCandy = () => CANDIES[Math.floor(Math.random() * CANDIES.length)];
 
@@ -101,6 +103,8 @@
         running = true;
         settled = true;
         busy = false;
+        processingMatches = false;
+        matchFx.innerHTML = "";
         selected = null;
         drag = null;
         gameOverEl.hidden = true;
@@ -199,13 +203,64 @@
         return found;
     }
 
+    function animateMatches(indices) {
+        const boardRect = boardEl.getBoundingClientRect();
+        const points = indices.map(i => {
+            const r = Math.floor(i / COLS), c = i % COLS;
+            const rect = tiles[r][c].getBoundingClientRect();
+            tiles[r][c].classList.add("matching");
+            return { r, c, x: rect.left - boardRect.left + rect.width / 2, y: rect.top - boardRect.top + rect.height / 2 };
+        });
+        matchFx.style.left = `${boardEl.offsetLeft}px`;
+        matchFx.style.top = `${boardEl.offsetTop}px`;
+        matchFx.style.width = `${boardEl.clientWidth}px`;
+        matchFx.style.height = `${boardEl.clientHeight}px`;
+        matchFx.setAttribute("viewBox", `0 0 ${boardRect.width} ${boardRect.height}`);
+        matchFx.innerHTML = "";
+        const groups = [];
+        const remaining = new Set(points.map(p => `${p.r},${p.c}`));
+        while (remaining.size) {
+            const seed = remaining.values().next().value;
+            const [sr, sc] = seed.split(",").map(Number);
+            const group = [];
+            const queue = [[sr, sc]];
+            remaining.delete(seed);
+            while (queue.length) {
+                const [r, c] = queue.shift();
+                const point = points.find(p => p.r === r && p.c === c);
+                if (point) group.push(point);
+                for (const [nr, nc] of [[r-1,c],[r+1,c],[r,c-1],[r,c+1]]) {
+                    const key = `${nr},${nc}`;
+                    if (remaining.has(key)) { remaining.delete(key); queue.push([nr,nc]); }
+                }
+            }
+            if (group.length >= 2) groups.push(group);
+        }
+        const ns = "http://www.w3.org/2000/svg";
+        groups.forEach(group => {
+            group.sort((a,b) => a.r === b.r ? a.c-b.c : a.r-b.r);
+            const path = document.createElementNS(ns,"path");
+            path.setAttribute("class","match-line");
+            path.setAttribute("d", group.map((pt,i) => `${i ? "L" : "M"} ${pt.x} ${pt.y}`).join(" "));
+            const length = group.reduce((sum,pt,i) => i ? sum + Math.hypot(pt.x-group[i-1].x,pt.y-group[i-1].y) : sum,0);
+            path.style.strokeDasharray = String(length);
+            path.style.strokeDashoffset = String(length);
+            matchFx.append(path);
+        });
+        points.forEach(pt => {
+            const spark = document.createElementNS(ns,"circle");
+            spark.setAttribute("class","match-spark"); spark.setAttribute("cx",pt.x); spark.setAttribute("cy",pt.y); spark.setAttribute("r","5");
+            matchFx.append(spark);
+        });
+    }
+
     function hasEmpty() {
         return grid.some(row => row.some(cell => cell === null));
     }
 
     // one animation step: fall one row, or crush whatever matches
     function tick() {
-        if (!running) return;
+        if (!running || processingMatches) return;
 
         if (hasEmpty()) {
             for (let c = 0; c < COLS; c++) {
@@ -224,16 +279,28 @@
 
         const matches = findMatches();
         if (matches.size) {
+            if (processingMatches) return;
+            processingMatches = true;
             const firstIndex = matches.values().next().value;
             const type = grid[Math.floor(firstIndex / COLS)][firstIndex % COLS];
-            matches.forEach(i => { grid[Math.floor(i / COLS)][i % COLS] = null; });
+            const indices = [...matches];
+            animateMatches(indices);
             score += matches.size * POINTS_PER_CANDY;
             saveBestScore();
             showComment(MESSAGES[type] || "Service crushed!");
             playCrushSound();
-            settled = false;
             updateHud();
-            render();
+            setTimeout(() => {
+                indices.forEach(i => {
+                    const r = Math.floor(i / COLS), c = i % COLS;
+                    grid[r][c] = null;
+                    tiles[r][c].classList.remove("matching");
+                });
+                matchFx.innerHTML = "";
+                processingMatches = false;
+                settled = false;
+                render();
+            }, 330);
             return;
         }
 
@@ -332,7 +399,7 @@
         if (!drag || drag.swiped || e.pointerId !== drag.id) return;
         const dx = e.clientX - drag.x;
         const dy = e.clientY - drag.y;
-        const threshold = (boardEl.clientWidth / COLS) * 0.35;
+        const threshold = Math.max(10, (boardEl.clientWidth / COLS) * 0.24);
         if (Math.max(Math.abs(dx), Math.abs(dy)) < threshold) return;
 
         drag.swiped = true;
