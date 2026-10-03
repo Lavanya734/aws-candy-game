@@ -1587,3 +1587,172 @@ h1 span {
     border-radius: 4px;
   }
 }
+
+/* =====================================
+   MOBILE DECLUTTER — LARGER, CLEANER GRID
+   ===================================== */
+
+@media (max-width: 680px) {
+  :root {
+    /* use nearly the full screen width */
+    --board-size: min(calc(100vw - 16px), 600px);
+  }
+
+  body.game-page {
+    padding: 8px;
+  }
+
+  .game-layout {
+    gap: 10px;
+  }
+
+  /* ---- compact the sidebar so the board comes up the screen ---- */
+  .game-sidebar {
+    padding: 12px;
+    border-width: 2px;
+    box-shadow: 3px 3px 0 var(--ink);
+  }
+
+  .game-sidebar::before,
+  .brand-mark,
+  .eyebrow,
+  .subtitle {
+    display: none;
+  }
+
+  .back-link {
+    margin-bottom: 8px;
+    padding: 4px 8px;
+  }
+
+  h1 {
+    font-size: 28px;
+    text-shadow: 1px 2px 0 #ffe34f;
+  }
+
+  .stats {
+    margin: 10px 0 8px;
+    gap: 5px;
+  }
+
+  .stat-card {
+    min-height: 62px;
+    padding: 8px 4px;
+    border-width: 1.5px;
+    box-shadow: 2px 2px 0 var(--ink);
+  }
+
+  .stat-card strong {
+    font-size: clamp(16px, 4.6vw, 22px);
+  }
+
+  .status-panel {
+    min-height: 44px;
+    padding: 6px 8px;
+    gap: 8px;
+  }
+
+  .status-orb {
+    flex-basis: 28px;
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
+  }
+
+  /* ---- board frame: thinner chrome, more room for tiles ---- */
+  .play-area {
+    gap: 8px;
+  }
+
+  .board-heading {
+    padding: 0;
+  }
+
+  .board-caption {
+    display: none;
+  }
+
+  .board-frame {
+    width: var(--board-size);
+    height: var(--board-size);
+    margin: 0 auto;
+    padding: 4px;
+    border-width: 2px;
+    border-radius: 12px;
+    box-shadow: 3px 4px 0 var(--ink);
+  }
+
+  .board-frame::before {
+    display: none;            /* remove "SWEET MODE" badge overlap */
+  }
+
+  #board {
+    gap: 2px;
+    padding: 2px;
+    border-width: 1.5px;
+    border-radius: 8px;
+    background-image: none;   /* remove grid lines behind tiles */
+    background-color: #ffc6e0;
+    overflow: visible;        /* selected tile isn't clipped */
+  }
+
+  /* ---- tiles: flatter, bigger icon area ---- */
+  #board img {
+    padding: 1px;
+    border: 1px solid #fff;
+    border-radius: 6px;
+    background: #fffaf5;
+    box-shadow: 0 1px 0 #f48fb1;   /* single light shadow instead of two */
+    transition: transform .12s ease, background .12s ease;
+  }
+
+  #board img:nth-child(3n) {
+    border-radius: 6px;
+  }
+
+  #board img:hover {
+    transform: none;
+    filter: none;
+    box-shadow: 0 1px 0 #f48fb1;
+  }
+
+  #board img.selected {
+    transform: scale(1.06);
+    background: var(--yellow);
+    outline: 2px solid var(--pink);
+    outline-offset: -2px;
+    box-shadow: none;
+  }
+
+  .play-hint {
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 390px) {
+  :root {
+    --board-size: calc(100vw - 12px);
+  }
+
+  body.game-page {
+    padding: 6px;
+  }
+
+  h1 {
+    font-size: 24px;
+  }
+
+  .back-link {
+    display: none;
+  }
+
+  #board {
+    gap: 1.5px;
+    padding: 1.5px;
+  }
+
+  #board img {
+    border-radius: 4px;
+  }
+}
